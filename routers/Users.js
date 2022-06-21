@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserDB = require("../models/Users");
-
 const bcrypt = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
 
 
 router.post('/signup', async (req, res) => {
@@ -32,17 +30,11 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        //check the email in db
         let user = await UserDB.findOne({ email: req.body.email });
         if (user) {
-            //compare the passwords
+
             let compare = bcrypt.compareSync(req.body.password, user.password);
             if (compare) {
-                // let token = jwt.sign(
-                //   { name: user.name, email: user.email },
-                //   "anySecretKeyCanBeHere",
-                //   // { expiresIn: '24h' }
-                // );
                 res.status(201).json(user);
             } else {
                 res.status(401).json({ error: "Password is wrong" });
